@@ -34,7 +34,7 @@ export function parseMessage(text: string): ParsedMessage | null {
 // that contains a lowercase letter. Strips trailing non-alphanumeric characters.
 // e.g. "TL WANNABE (non solo Ivan)" → "TL WANNABE"
 function extractCapsTitle(line: string): string | null {
-  const tokens = line.split(/\s+/).filter(t => t.length > 0);
+  const tokens = line.replace(/[*_]/g, '').split(/\s+/).filter(t => t.length > 0);
   const capsTokens: string[] = [];
   for (const token of tokens) {
     if (/[a-z]/.test(token)) break;
