@@ -1,0 +1,74 @@
+import { parseChannelName, parseMessage } from '@/lib/parse';
+
+describe('parseChannelName', () => {
+  it('estrae team, nome e cognome da un canale valido', () => {
+    expect(parseChannelName('fb-engineering-marco-rossi')).toEqual({
+      team: 'engineering',
+      personName: 'Marco Rossi',
+    });
+  });
+
+  it('capitalizza nome e cognome', () => {
+    expect(parseChannelName('fb-design-sara-bianchi')).toEqual({
+      team: 'design',
+      personName: 'Sara Bianchi',
+    });
+  });
+
+  it('restituisce null per canali che non rispettano il pattern', () => {
+    expect(parseChannelName('general')).toBeNull();
+    expect(parseChannelName('fb-engineering')).toBeNull();
+    expect(parseChannelName('engineering-marco-rossi')).toBeNull();
+  });
+
+  it('restituisce null se il canale ha troppi segmenti (team con trattino)', () => {
+    expect(parseChannelName('fb-design-ops-john-doe')).toBeNull();
+  });
+
+  it('funziona con vari team', () => {
+    expect(parseChannelName('fb-product-luca-ferrari')?.team).toBe('product');
+    expect(parseChannelName('fb-ops-giulia-verdi')?.personName).toBe('Giulia Verdi');
+  });
+});
+
+describe('parseMessage', () => {
+  it('estrae titolo e descrizione da un messaggio valido', () => {
+    const text = 'ARCHITETTURA MICROSERVIZI\nDescrizione del contenuto qui';
+    expect(parseMessage(text)).toEqual({
+      title: 'Architettura Microservizi',
+      description: 'Descrizione del contenuto qui',
+    });
+  });
+
+  it('restituisce null per messaggi che iniziano con lettere minuscole', () => {
+    expect(parseMessage('hello world\ndescrizione')).toBeNull();
+    expect(parseMessage('Titolo Normale\ndescrizione')).toBeNull();
+  });
+
+  it('gestisce messaggi senza descrizione', () => {
+    expect(parseMessage('SOLO TITOLO')).toEqual({
+      title: 'Solo Titolo',
+      description: '',
+    });
+  });
+
+  it('ignora newline multipli e spazi extra', () => {
+    const text = '  TITOLO DEL PROGETTO  \n\n  Descrizione qui\n  seconda riga  ';
+    const result = parseMessage(text);
+    expect(result?.title).toBe('Titolo Del Progetto');
+    expect(result?.description).toBe('Descrizione qui\nseconda riga');
+  });
+
+  it('restituisce null per testo vuoto o solo spazi', () => {
+    expect(parseMessage('')).toBeNull();
+    expect(parseMessage('   \n\n  ')).toBeNull();
+  });
+
+  it('accetta ALL CAPS con numeri e punteggiatura', () => {
+    expect(parseMessage('PROGETTO 2024: UPGRADE\nDescrizione')).not.toBeNull();
+  });
+
+  it('restituisce null se la prima riga contiene almeno una lettera minuscola', () => {
+    expect(parseMessage('TITOLO parziale\ndescrizione')).toBeNull();
+  });
+});
