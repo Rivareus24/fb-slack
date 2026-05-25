@@ -1,4 +1,5 @@
 import { WebClient } from '@slack/web-api';
+import { emojify } from 'node-emoji';
 import { parseChannelName, parseMessage } from './parse';
 import { formatRelativeDate } from './date';
 import type { CardItem } from './types';
@@ -106,7 +107,7 @@ export async function fetchCards(): Promise<CardItem[]> {
     const messages = await fetchChannelMessages(slack, channel.id);
 
     for (const message of messages) {
-      const parsedMsg = parseMessage(message.text);
+      const parsedMsg = parseMessage(emojify(message.text));
       if (!parsedMsg) continue;
 
       const replyCount = message.reply_count ?? 0;
