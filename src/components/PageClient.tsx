@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import type { CardItem } from '@/lib/types';
 import { Card } from './Card';
 import { InfoPopover } from './InfoPopover';
@@ -20,14 +20,18 @@ export function PageClient({ items }: PageClientProps) {
   const [activeTeams, setActiveTeams] = useState<Set<string>>(() => new Set(teams));
   const [search, setSearch] = useState('');
 
+  useEffect(() => {
+    setActiveTeams(new Set(teams));
+  }, [teams]);
+
   const filtered = useMemo(() => {
     // If no chip is active → show all (no filter applied)
     const noFilter = activeTeams.size === 0;
 
     return items.filter(item => {
       if (!noFilter && !activeTeams.has(item.team)) return false;
-      if (!search.trim()) return true;
-      const q = search.toLowerCase();
+      const q = search.trim().toLowerCase();
+      if (!q) return true;
       return (
         item.title.toLowerCase().includes(q) ||
         item.personName.toLowerCase().includes(q) ||
@@ -86,6 +90,7 @@ export function PageClient({ items }: PageClientProps) {
         {teams.map(team => (
           <button
             key={team}
+            type="button"
             onClick={() => toggleTeam(team)}
             aria-pressed={activeTeams.has(team)}
             className={`text-[13px] font-medium px-[15px] py-[6px] rounded-full border-[1.5px] transition-all whitespace-nowrap cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
@@ -100,7 +105,7 @@ export function PageClient({ items }: PageClientProps) {
 
         <div className="w-px h-5 bg-zinc-200 mx-1.5" aria-hidden="true" />
 
-        <span className="text-[13px] text-zinc-400 ml-auto whitespace-nowrap" aria-live="polite">
+        <span className="text-[13px] text-zinc-400 ml-auto whitespace-nowrap" aria-live="polite" aria-atomic="true">
           {filtered.length} messaggi visibili
         </span>
       </div>
