@@ -1,5 +1,4 @@
 // src/components/Card.tsx
-import Link from 'next/link';
 import type { CardItem } from '@/lib/types';
 import { isFreshThread } from '@/lib/date';
 
@@ -10,15 +9,17 @@ interface CardProps {
 export function Card({ item }: CardProps) {
   const fresh = isFreshThread(item.lastThreadUpdateTs);
   const initials = item.personName
-    .split(' ')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
     .map(n => n[0])
     .join('')
     .toUpperCase()
-    .slice(0, 2);
+    .slice(0, 2) || '?';
 
   return (
-    <Link
-      href={item.permalink}
+    <a
+      href={item.permalink || '#'}
       target="_blank"
       rel="noopener noreferrer"
       className="group flex flex-col bg-white rounded-2xl p-7 border border-zinc-200 shadow-[0_1px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.09)] hover:-translate-y-[3px] focus:outline-none focus-visible:ring-[3px] focus-visible:ring-indigo-500 focus-visible:ring-offset-0 transition-all duration-200 cursor-pointer hover:border-zinc-300"
@@ -67,6 +68,7 @@ export function Card({ item }: CardProps) {
             className={`w-1.5 h-1.5 rounded-full shrink-0 ${
               fresh ? 'bg-green-400' : 'bg-zinc-300'
             }`}
+            aria-hidden="true"
           />
           <time dateTime={new Date(item.lastThreadUpdateTs * 1000).toISOString()}>
             {item.lastThreadUpdateFormatted}
@@ -74,7 +76,7 @@ export function Card({ item }: CardProps) {
         </div>
         {item.replyCount > 0 ? (
           <span className="text-xs font-medium text-blue-600 bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-full">
-            🧵 {item.replyCount} {item.replyCount === 1 ? 'risposta' : 'risposte'}
+            <span aria-hidden="true">🧵</span> {item.replyCount} {item.replyCount === 1 ? 'risposta' : 'risposte'}
           </span>
         ) : (
           <span className="text-xs font-medium text-zinc-400 bg-zinc-50 border border-zinc-200 px-2.5 py-1 rounded-full">
@@ -82,6 +84,6 @@ export function Card({ item }: CardProps) {
           </span>
         )}
       </div>
-    </Link>
+    </a>
   );
 }
