@@ -21,7 +21,7 @@ export function Card({ item }: CardProps) {
       href={item.permalink}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex flex-col bg-white rounded-2xl p-7 border border-zinc-200 shadow-[0_1px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.09)] hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-0 transition-all duration-200 cursor-pointer"
+      className="group flex flex-col bg-white rounded-2xl p-7 border border-zinc-200 shadow-[0_1px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.09)] hover:-translate-y-[3px] focus:outline-none focus-visible:ring-[3px] focus-visible:ring-indigo-500 focus-visible:ring-offset-0 transition-all duration-200 cursor-pointer hover:border-zinc-300"
       aria-label={`${item.title} – ${item.personName} – ${item.team} – apri su Slack`}
     >
       {/* Titolo argomento */}
@@ -30,7 +30,7 @@ export function Card({ item }: CardProps) {
           {item.title}
         </h2>
         <span
-          className="text-xs text-zinc-400 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity pt-0.5 shrink-0 whitespace-nowrap"
+          className="text-xs text-zinc-400 opacity-0 group-hover:opacity-100 group-focus:opacity-100 group-focus-visible:opacity-100 transition-opacity pt-0.5 shrink-0 whitespace-nowrap"
           aria-hidden="true"
         >
           ↗ Slack
