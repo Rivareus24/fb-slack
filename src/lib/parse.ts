@@ -13,9 +13,6 @@ export function parseChannelName(channelName: string): ParsedChannel | null {
   };
 }
 
-// A line is valid if it contains NO lowercase letters
-const HAS_LOWERCASE = /[a-z]/;
-
 export function parseMessage(text: string): ParsedMessage | null {
   const lines = text
     .split('\n')
@@ -24,13 +21,28 @@ export function parseMessage(text: string): ParsedMessage | null {
 
   if (lines.length === 0) return null;
 
-  const firstLine = lines[0];
-  if (HAS_LOWERCASE.test(firstLine)) return null;
+  const rawTitle = extractCapsTitle(lines[0]);
+  if (!rawTitle) return null;
 
   return {
-    title: toTitleCase(firstLine),
+    title: toTitleCase(rawTitle),
     description: lines.slice(1).join('\n').trim(),
   };
+}
+
+// Extracts the leading ALL CAPS tokens from a line, stopping at the first token
+// that contains a lowercase letter. Strips trailing non-alphanumeric characters.
+// e.g. "TL WANNABE (non solo Ivan)" → "TL WANNABE"
+function extractCapsTitle(line: string): string | null {
+  const tokens = line.split(/\s+/).filter(t => t.length > 0);
+  const capsTokens: string[] = [];
+  for (const token of tokens) {
+    if (/[a-z]/.test(token)) break;
+    capsTokens.push(token);
+  }
+  if (capsTokens.length === 0) return null;
+  const title = capsTokens.join(' ').replace(/[^A-Z0-9]+$/, '').trim();
+  return title || null;
 }
 
 function capitalize(s: string): string {

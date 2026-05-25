@@ -42,7 +42,6 @@ describe('parseMessage', () => {
 
   it('restituisce null per messaggi che iniziano con lettere minuscole', () => {
     expect(parseMessage('hello world\ndescrizione')).toBeNull();
-    expect(parseMessage('Titolo Normale\ndescrizione')).toBeNull();
   });
 
   it('gestisce messaggi senza descrizione', () => {
@@ -68,7 +67,19 @@ describe('parseMessage', () => {
     expect(parseMessage('PROGETTO 2024: UPGRADE\nDescrizione')).not.toBeNull();
   });
 
-  it('restituisce null se la prima riga contiene almeno una lettera minuscola', () => {
-    expect(parseMessage('TITOLO parziale\ndescrizione')).toBeNull();
+  it('restituisce null se la prima riga inizia con lettere minuscole', () => {
+    expect(parseMessage('hello world\ndescrizione')).toBeNull();
+    expect(parseMessage('Titolo Normale\ndescrizione')).toBeNull();
+  });
+
+  it('estrae solo la parte in maiuscolo se la prima riga ha un suffisso minuscolo', () => {
+    expect(parseMessage('TL WANNABE    (non solo Ivan :eyes: )')).toEqual({
+      title: 'Tl Wannabe',
+      description: '',
+    });
+    expect(parseMessage('TITOLO parziale\ndescrizione')).toEqual({
+      title: 'Titolo',
+      description: 'descrizione',
+    });
   });
 });
