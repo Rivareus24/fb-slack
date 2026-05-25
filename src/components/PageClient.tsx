@@ -55,7 +55,7 @@ export function PageClient({ items }: PageClientProps) {
       <header className="bg-white border-b border-zinc-200 px-9 h-[66px] flex items-center gap-5 sticky top-0 z-20">
         <div className="flex items-center gap-3">
           <h1 className="text-[19px] font-bold text-zinc-900 tracking-tight">
-            Team Directory
+            Zupit feedback people
           </h1>
           <InfoPopover />
         </div>

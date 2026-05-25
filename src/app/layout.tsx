@@ -5,7 +5,7 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Team Directory',
+  title: 'Zupit feedback people',
   description: 'Messaggi Slack dai canali fb-team',
 };
 
