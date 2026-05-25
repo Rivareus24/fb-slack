@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from 'react';
 import type { CardItem } from '@/lib/types';
 import { Card } from './Card';
 import { InfoPopover } from './InfoPopover';
+import { teamColor } from '@/lib/teamColor';
 
 interface PageClientProps {
   items: CardItem[];
@@ -95,8 +96,8 @@ export function PageClient({ items }: PageClientProps) {
             aria-pressed={activeTeams.has(team)}
             className={`text-[13px] font-medium px-[15px] py-[6px] rounded-full border-[1.5px] transition-all whitespace-nowrap cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
               activeTeams.has(team)
-                ? 'bg-zinc-900 text-white border-zinc-900'
-                : 'bg-white text-zinc-500 border-zinc-200 hover:border-zinc-400 hover:text-zinc-700'
+                ? `${teamColor(team).bg} ${teamColor(team).text} ${teamColor(team).border}`
+                : 'bg-white text-zinc-400 border-zinc-200 hover:border-zinc-300 hover:text-zinc-600'
             }`}
           >
             {team}

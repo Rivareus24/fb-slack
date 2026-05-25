@@ -1,21 +1,6 @@
 import type { CardItem } from '@/lib/types';
 import { isFreshThread } from '@/lib/date';
-
-const TEAM_PALETTE = [
-  { bg: 'bg-indigo-50',  text: 'text-indigo-600'  },
-  { bg: 'bg-violet-50',  text: 'text-violet-600'  },
-  { bg: 'bg-sky-50',     text: 'text-sky-600'     },
-  { bg: 'bg-emerald-50', text: 'text-emerald-600' },
-  { bg: 'bg-amber-50',   text: 'text-amber-600'   },
-  { bg: 'bg-rose-50',    text: 'text-rose-600'    },
-  { bg: 'bg-teal-50',    text: 'text-teal-600'    },
-  { bg: 'bg-orange-50',  text: 'text-orange-600'  },
-];
-
-function teamColor(team: string) {
-  const sum = [...team].reduce((acc, c) => acc + c.charCodeAt(0), 0);
-  return TEAM_PALETTE[sum % TEAM_PALETTE.length];
-}
+import { teamColor } from '@/lib/teamColor';
 
 interface CardProps {
   item: CardItem;
@@ -24,14 +9,6 @@ interface CardProps {
 export function Card({ item }: CardProps) {
   const fresh = isFreshThread(item.lastThreadUpdateTs);
   const color = teamColor(item.team);
-  const initials = item.personName
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-    .map(n => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2) || '?';
 
   return (
     <a
@@ -56,17 +33,11 @@ export function Card({ item }: CardProps) {
 
       {/* Riga persona */}
       <div className="flex items-center gap-2.5 py-3.5 border-y border-zinc-100 mb-5">
-        <div
-          className={`w-[30px] h-[30px] rounded-full flex items-center justify-center text-[10.5px] font-bold shrink-0 ${color.bg} ${color.text}`}
-          aria-hidden="true"
-        >
-          {initials}
-        </div>
-        <span className="text-[13.5px] font-semibold text-zinc-600 flex-1">
-          {item.personName}
-        </span>
-        <span className={`text-[12px] font-semibold px-2.5 py-1 rounded-full ${color.bg} ${color.text}`}>
+        <span className={`text-[12px] font-semibold px-2.5 py-1 rounded-full shrink-0 ${color.bg} ${color.text}`}>
           {item.team}
+        </span>
+        <span className="text-[13.5px] font-semibold text-zinc-600">
+          {item.personName}
         </span>
       </div>
 
