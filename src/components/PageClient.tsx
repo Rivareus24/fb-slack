@@ -20,7 +20,7 @@ export function PageClient({ items }: PageClientProps) {
   // Default: all teams active
   const [activeTeams, setActiveTeams] = useState<Set<string>>(() => new Set(teams));
   const [search, setSearch] = useState('');
-  const [sortOrder, setSortOrder] = useState<'date' | 'team' | 'person'>('date');
+  const [sortOrder, setSortOrder] = useState<'date' | 'team'>('date');
 
   useEffect(() => {
     setActiveTeams(new Set(teams));
@@ -44,8 +44,6 @@ export function PageClient({ items }: PageClientProps) {
       result.sort((a, b) =>
         a.team.localeCompare(b.team, 'it') || a.personName.localeCompare(b.personName, 'it')
       );
-    } else if (sortOrder === 'person') {
-      result.sort((a, b) => a.personName.localeCompare(b.personName, 'it'));
     }
     // 'date': items from server are already sorted newest-first
 
@@ -119,13 +117,12 @@ export function PageClient({ items }: PageClientProps) {
 
         <select
           value={sortOrder}
-          onChange={e => setSortOrder(e.target.value as 'date' | 'team' | 'person')}
+          onChange={e => setSortOrder(e.target.value as 'date' | 'team')}
           aria-label="Ordina per"
           className="ml-auto text-[13px] text-zinc-500 border border-zinc-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-indigo-400 cursor-pointer"
         >
           <option value="date">↓ Data aggiornamento</option>
-          <option value="team">Team A-Z</option>
-          <option value="person">Persona A-Z</option>
+          <option value="team">Team, Persona A-Z</option>
         </select>
 
         <span className="text-[13px] text-zinc-400 whitespace-nowrap" aria-live="polite" aria-atomic="true">
