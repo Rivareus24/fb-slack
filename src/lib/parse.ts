@@ -25,7 +25,7 @@ export function parseMessage(text: string): ParsedMessage | null {
   if (!rawTitle) return null;
 
   return {
-    title: toTitleCase(rawTitle),
+    title: rawTitle,
     description: lines.slice(1).join('\n').trim(),
   };
 }
@@ -50,6 +50,3 @@ function capitalize(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
 }
 
-function toTitleCase(s: string): string {
-  return s.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
-}

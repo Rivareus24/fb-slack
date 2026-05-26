@@ -20,16 +20,16 @@ export function PageClient({ items }: PageClientProps) {
   // Default: all teams active
   const [activeTeams, setActiveTeams] = useState<Set<string>>(() => new Set(teams));
   const [search, setSearch] = useState('');
+  const [sortOrder, setSortOrder] = useState<'date' | 'team' | 'person'>('date');
 
   useEffect(() => {
     setActiveTeams(new Set(teams));
   }, [teams]);
 
   const filtered = useMemo(() => {
-    // If no chip is active → show all (no filter applied)
     const noFilter = activeTeams.size === 0;
 
-    return items.filter(item => {
+    const result = items.filter(item => {
       if (!noFilter && !activeTeams.has(item.team)) return false;
       const q = search.trim().toLowerCase();
       if (!q) return true;
@@ -39,7 +39,18 @@ export function PageClient({ items }: PageClientProps) {
         item.description.toLowerCase().includes(q)
       );
     });
-  }, [items, activeTeams, search]);
+
+    if (sortOrder === 'team') {
+      result.sort((a, b) =>
+        a.team.localeCompare(b.team, 'it') || a.personName.localeCompare(b.personName, 'it')
+      );
+    } else if (sortOrder === 'person') {
+      result.sort((a, b) => a.personName.localeCompare(b.personName, 'it'));
+    }
+    // 'date': items from server are already sorted newest-first
+
+    return result;
+  }, [items, activeTeams, search, sortOrder]);
 
   function toggleTeam(team: string) {
     setActiveTeams(prev => {
@@ -106,7 +117,18 @@ export function PageClient({ items }: PageClientProps) {
 
         <div className="w-px h-5 bg-zinc-200 mx-1.5" aria-hidden="true" />
 
-        <span className="text-[13px] text-zinc-400 ml-auto whitespace-nowrap" aria-live="polite" aria-atomic="true">
+        <select
+          value={sortOrder}
+          onChange={e => setSortOrder(e.target.value as 'date' | 'team' | 'person')}
+          aria-label="Ordina per"
+          className="ml-auto text-[13px] text-zinc-500 border border-zinc-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-indigo-400 cursor-pointer"
+        >
+          <option value="date">↓ Data aggiornamento</option>
+          <option value="team">Team A-Z</option>
+          <option value="person">Persona A-Z</option>
+        </select>
+
+        <span className="text-[13px] text-zinc-400 whitespace-nowrap" aria-live="polite" aria-atomic="true">
           {filtered.length} messaggi visibili
         </span>
       </div>

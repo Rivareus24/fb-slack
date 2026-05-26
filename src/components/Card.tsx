@@ -62,11 +62,11 @@ export function Card({ item }: CardProps) {
           </time>
         </div>
         {item.replyCount > 0 ? (
-          <span className="text-xs font-medium text-blue-600 bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-full">
+          <span className="text-xs font-medium text-blue-500 border border-blue-300 px-2.5 py-1 rounded-full">
             <span aria-hidden="true">🧵</span> {item.replyCount} {item.replyCount === 1 ? 'risposta' : 'risposte'}
           </span>
         ) : (
-          <span className="text-xs font-medium text-zinc-400 bg-zinc-50 border border-zinc-200 px-2.5 py-1 rounded-full">
+          <span className="text-xs font-medium text-zinc-400 border border-zinc-200 px-2.5 py-1 rounded-full">
             nessuna risposta
           </span>
         )}

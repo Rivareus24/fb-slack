@@ -35,7 +35,7 @@ describe('parseMessage', () => {
   it('estrae titolo e descrizione da un messaggio valido', () => {
     const text = 'ARCHITETTURA MICROSERVIZI\nDescrizione del contenuto qui';
     expect(parseMessage(text)).toEqual({
-      title: 'Architettura Microservizi',
+      title: 'ARCHITETTURA MICROSERVIZI',
       description: 'Descrizione del contenuto qui',
     });
   });
@@ -46,7 +46,7 @@ describe('parseMessage', () => {
 
   it('gestisce messaggi senza descrizione', () => {
     expect(parseMessage('SOLO TITOLO')).toEqual({
-      title: 'Solo Titolo',
+      title: 'SOLO TITOLO',
       description: '',
     });
   });
@@ -54,7 +54,7 @@ describe('parseMessage', () => {
   it('ignora newline multipli e spazi extra', () => {
     const text = '  TITOLO DEL PROGETTO  \n\n  Descrizione qui\n  seconda riga  ';
     const result = parseMessage(text);
-    expect(result?.title).toBe('Titolo Del Progetto');
+    expect(result?.title).toBe('TITOLO DEL PROGETTO');
     expect(result?.description).toBe('Descrizione qui\nseconda riga');
   });
 
@@ -74,11 +74,11 @@ describe('parseMessage', () => {
 
   it('estrae solo la parte in maiuscolo se la prima riga ha un suffisso minuscolo', () => {
     expect(parseMessage('TL WANNABE    (non solo Ivan :eyes: )')).toEqual({
-      title: 'Tl Wannabe',
+      title: 'TL WANNABE',
       description: '',
     });
     expect(parseMessage('TITOLO parziale\ndescrizione')).toEqual({
-      title: 'Titolo',
+      title: 'TITOLO',
       description: 'descrizione',
     });
   });
