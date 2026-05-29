@@ -1,4 +1,5 @@
 import type { ParsedChannel, ParsedMessage } from './types';
+import { resolveTeamName } from './teams';
 
 const PERSON_CHANNEL_PATTERN = /^fb-([^-]+)-([^-]+)-([^-]+)$/;
 const TEAM_CHANNEL_PATTERN = /^fb-([^-]+)-team$/;
@@ -6,13 +7,16 @@ const TEAM_CHANNEL_PATTERN = /^fb-([^-]+)-team$/;
 export function parseChannelName(channelName: string): ParsedChannel | null {
   const personMatch = channelName.match(PERSON_CHANNEL_PATTERN);
   if (personMatch) {
-    const [, team, firstName, lastName] = personMatch;
-    return { team, personName: `${capitalize(firstName)} ${capitalize(lastName)}` };
+    const [, rawTeam, firstName, lastName] = personMatch;
+    return {
+      team: resolveTeamName(rawTeam),
+      personName: `${capitalize(firstName)} ${capitalize(lastName)}`,
+    };
   }
 
   const teamMatch = channelName.match(TEAM_CHANNEL_PATTERN);
   if (teamMatch) {
-    return { team: teamMatch[1], personName: '' };
+    return { team: resolveTeamName(teamMatch[1]), personName: '' };
   }
 
   return null;

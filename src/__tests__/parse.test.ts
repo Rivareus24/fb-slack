@@ -1,24 +1,29 @@
 import { parseChannelName, parseMessage } from '@/lib/parse';
 
 describe('parseChannelName', () => {
-  it('estrae team, nome e cognome da un canale valido', () => {
-    expect(parseChannelName('fb-engineering-marco-rossi')).toEqual({
-      team: 'engineering',
+  it('risolve il prefisso abbreviato al nome completo del team', () => {
+    expect(parseChannelName('fb-plu-marco-rossi')).toEqual({
+      team: 'Plutonium',
       personName: 'Marco Rossi',
     });
-  });
-
-  it('capitalizza nome e cognome', () => {
-    expect(parseChannelName('fb-design-sara-bianchi')).toEqual({
-      team: 'design',
+    expect(parseChannelName('fb-car-sara-bianchi')).toEqual({
+      team: 'Carbon',
       personName: 'Sara Bianchi',
     });
   });
 
+  it('risolve tutti i team noti', () => {
+    expect(parseChannelName('fb-arg-a-b')?.team).toBe('Argon');
+    expect(parseChannelName('fb-neo-a-b')?.team).toBe('Neon');
+    expect(parseChannelName('fb-ura-a-b')?.team).toBe('Uranium');
+    expect(parseChannelName('fb-tit-a-b')?.team).toBe('Titanium');
+    expect(parseChannelName('fb-hyd-a-b')?.team).toBe('Hydrogen');
+  });
+
   it('restituisce null per canali che non rispettano il pattern', () => {
     expect(parseChannelName('general')).toBeNull();
-    expect(parseChannelName('fb-engineering')).toBeNull();
-    expect(parseChannelName('engineering-marco-rossi')).toBeNull();
+    expect(parseChannelName('fb-plu')).toBeNull();
+    expect(parseChannelName('plu-marco-rossi')).toBeNull();
   });
 
   it('restituisce null se il canale ha troppi segmenti (team con trattino)', () => {
@@ -26,14 +31,9 @@ describe('parseChannelName', () => {
   });
 
   it('riconosce i canali team nel formato fb-[nometeam]-team', () => {
-    expect(parseChannelName('fb-engineering-team')).toEqual({ team: 'engineering', personName: '' });
-    expect(parseChannelName('fb-uranium-team')).toEqual({ team: 'uranium', personName: '' });
-    expect(parseChannelName('fb-carbon-team')).toEqual({ team: 'carbon', personName: '' });
-  });
-
-  it('funziona con vari team', () => {
-    expect(parseChannelName('fb-product-luca-ferrari')?.team).toBe('product');
-    expect(parseChannelName('fb-ops-giulia-verdi')?.personName).toBe('Giulia Verdi');
+    expect(parseChannelName('fb-uranium-team')).toEqual({ team: 'Uranium', personName: '' });
+    expect(parseChannelName('fb-carbon-team')).toEqual({ team: 'Carbon', personName: '' });
+    expect(parseChannelName('fb-plutonium-team')).toEqual({ team: 'Plutonium', personName: '' });
   });
 });
 
