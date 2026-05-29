@@ -8,6 +8,7 @@ const COLORS: Record<string, TeamColors> = {
   Uranium:   { bg: 'bg-yellow-50',  text: 'text-yellow-700',  border: 'border-yellow-200'  },
   Titanium:  { bg: 'bg-red-50',     text: 'text-red-600',     border: 'border-red-200'     },
   Hydrogen:  { bg: 'bg-stone-100',  text: 'text-stone-600',   border: 'border-stone-300'   },
+  Design:    { bg: 'bg-pink-50',    text: 'text-pink-600',    border: 'border-pink-200'    },
 };
 
 const FALLBACK: TeamColors = { bg: 'bg-zinc-50', text: 'text-zinc-600', border: 'border-zinc-200' };

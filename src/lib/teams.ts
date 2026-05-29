@@ -8,6 +8,7 @@ const TEAM_MAP: Record<string, string> = {
   ura: 'Uranium',   uranium:   'Uranium',
   tit: 'Titanium',  titanium:  'Titanium',
   hyd: 'Hydrogen',  hydrogen:  'Hydrogen',
+  des: 'Design',    design:    'Design',
 };
 
 export function resolveTeamName(raw: string): string {
