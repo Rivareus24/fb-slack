@@ -1,16 +1,21 @@
 import type { ParsedChannel, ParsedMessage } from './types';
 
-// Pattern: exactly fb-[team]-[nome]-[cognome] — team has no hyphens
-const CHANNEL_PATTERN = /^fb-([^-]+)-([^-]+)-([^-]+)$/;
+const PERSON_CHANNEL_PATTERN = /^fb-([^-]+)-([^-]+)-([^-]+)$/;
+const TEAM_CHANNEL_PATTERN = /^fb-([^-]+)-team$/;
 
 export function parseChannelName(channelName: string): ParsedChannel | null {
-  const match = channelName.match(CHANNEL_PATTERN);
-  if (!match) return null;
-  const [, team, firstName, lastName] = match;
-  return {
-    team,
-    personName: `${capitalize(firstName)} ${capitalize(lastName)}`,
-  };
+  const personMatch = channelName.match(PERSON_CHANNEL_PATTERN);
+  if (personMatch) {
+    const [, team, firstName, lastName] = personMatch;
+    return { team, personName: `${capitalize(firstName)} ${capitalize(lastName)}` };
+  }
+
+  const teamMatch = channelName.match(TEAM_CHANNEL_PATTERN);
+  if (teamMatch) {
+    return { team: teamMatch[1], personName: '' };
+  }
+
+  return null;
 }
 
 export function parseMessage(text: string): ParsedMessage | null {
@@ -32,11 +37,14 @@ export function parseMessage(text: string): ParsedMessage | null {
 
 // Extracts the leading ALL CAPS tokens from a line, stopping at the first token
 // that contains a lowercase letter. Strips trailing non-alphanumeric characters.
+// Emoji shortcodes like :bust_in_silhouette: are skipped transparently.
+// e.g. ":bust_in_silhouette: GIANMARCO SANTI ft Mario" → "GIANMARCO SANTI"
 // e.g. "TL WANNABE (non solo Ivan)" → "TL WANNABE"
 function extractCapsTitle(line: string): string | null {
   const tokens = line.replace(/[*_]/g, '').split(/\s+/).filter(t => t.length > 0);
   const capsTokens: string[] = [];
   for (const token of tokens) {
+    if (/^:[a-z0-9_+-]+:$/.test(token)) continue; // unconverted emoji shortcode — skip
     if (/[a-z]/.test(token)) break;
     capsTokens.push(token);
   }

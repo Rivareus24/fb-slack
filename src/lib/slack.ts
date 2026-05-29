@@ -4,8 +4,8 @@ import { parseChannelName, parseMessage } from './parse';
 import { formatRelativeDate } from './date';
 import type { CardItem } from './types';
 
-// Matches exactly: fb-[team]-[nome]-[cognome] — team has no hyphens
-const CHANNEL_PATTERN = /^fb-[^-]+-[^-]+-[^-]+$/;
+// Matches fb-[team]-[nome]-[cognome] (individual) or fb-[team]-team (team channel)
+const CHANNEL_PATTERN = /^fb-[^-]+(-[^-]+-[^-]+|-team)$/;
 
 interface SlackMessage {
   ts: string;

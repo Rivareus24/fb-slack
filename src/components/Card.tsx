@@ -36,9 +36,11 @@ export function Card({ item }: CardProps) {
         <span className={`text-[12px] font-semibold px-2.5 py-1 rounded-full shrink-0 ${color.bg} ${color.text}`}>
           {item.team}
         </span>
-        <span className="text-[13.5px] font-semibold text-zinc-600">
-          {item.personName}
-        </span>
+        {item.personName && (
+          <span className="text-[13.5px] font-semibold text-zinc-600">
+            {item.personName}
+          </span>
+        )}
       </div>
 
       {/* Descrizione */}

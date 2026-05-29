@@ -25,6 +25,12 @@ describe('parseChannelName', () => {
     expect(parseChannelName('fb-design-ops-john-doe')).toBeNull();
   });
 
+  it('riconosce i canali team nel formato fb-[nometeam]-team', () => {
+    expect(parseChannelName('fb-engineering-team')).toEqual({ team: 'engineering', personName: '' });
+    expect(parseChannelName('fb-uranium-team')).toEqual({ team: 'uranium', personName: '' });
+    expect(parseChannelName('fb-carbon-team')).toEqual({ team: 'carbon', personName: '' });
+  });
+
   it('funziona con vari team', () => {
     expect(parseChannelName('fb-product-luca-ferrari')?.team).toBe('product');
     expect(parseChannelName('fb-ops-giulia-verdi')?.personName).toBe('Giulia Verdi');
@@ -70,6 +76,17 @@ describe('parseMessage', () => {
   it('restituisce null se la prima riga inizia con lettere minuscole', () => {
     expect(parseMessage('hello world\ndescrizione')).toBeNull();
     expect(parseMessage('Titolo Normale\ndescrizione')).toBeNull();
+  });
+
+  it('salta shortcode emoji non convertiti e estrae il titolo caps', () => {
+    expect(parseMessage(':bust_in_silhouette: GIANMARCO SANTI ft Mario e Camilla')).toEqual({
+      title: 'GIANMARCO SANTI',
+      description: '',
+    });
+    expect(parseMessage(':fire: PROGETTO ALPHA\nDescrizione')).toEqual({
+      title: 'PROGETTO ALPHA',
+      description: 'Descrizione',
+    });
   });
 
   it('estrae solo la parte in maiuscolo se la prima riga ha un suffisso minuscolo', () => {
