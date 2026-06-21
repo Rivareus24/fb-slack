@@ -16,6 +16,12 @@ interface SlackMessage {
   reply_count?: number;
 }
 
+// Messages used only to invite the bot (e.g. "@fb") arrive as bare mentions
+// like "<@U12345>". Skip messages that contain nothing but mentions/punctuation.
+function isOnlyMentions(text: string): boolean {
+  return text.replace(/<@[^>]+>/g, '').replace(/[^\p{L}\p{N}]/gu, '') === '';
+}
+
 function getClient(): WebClient {
   const token = process.env.SLACK_BOT_TOKEN;
   if (!token) throw new Error('SLACK_BOT_TOKEN non configurato in .env.local');
@@ -58,7 +64,13 @@ async function fetchChannelMessages(
       cursor,
     });
     for (const msg of res.messages ?? []) {
-      if (msg.type === 'message' && !msg.subtype && msg.ts && msg.text) {
+      if (
+        msg.type === 'message' &&
+        !msg.subtype &&
+        msg.ts &&
+        msg.text &&
+        !isOnlyMentions(msg.text)
+      ) {
         result.push(msg as SlackMessage);
       }
     }

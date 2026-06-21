@@ -40,6 +40,10 @@ export function InfoPopover() {
                 <code className="text-[11px] bg-zinc-100 px-1 py-0.5 rounded font-mono text-zinc-600">
                   fb-[team]-[nome]-[cognome]
                 </code>
+                ,{' '}
+                <code className="text-[11px] bg-zinc-100 px-1 py-0.5 rounded font-mono text-zinc-600">
+                  fb-[team]
+                </code>
               </>,
               <>
                 <strong className="font-semibold text-zinc-800">Nome</strong> e{' '}
@@ -48,7 +52,7 @@ export function InfoPopover() {
               </>,
               <>
                 Il <strong className="font-semibold text-zinc-800">titolo</strong> è la
-                prima riga del messaggio in maiuscolo (l&apos;argomento trattato)
+                prima riga del messaggio/argomento
               </>,
               'La descrizione è il testo che segue il titolo nel messaggio',
               <>
@@ -58,8 +62,7 @@ export function InfoPopover() {
                 </strong>
                 , dal più recente
               </>,
-              'Clicca una card → apre il messaggio originale su Slack',
-              'I toggle filtrano per team; se nessuno è attivo, vedi tutto',
+              'Clicca una card → apre il messaggio su Slack',
             ].map((text, i) => (
               <li key={i} className="flex gap-2 text-[12px] text-zinc-500 leading-relaxed">
                 <span className="text-indigo-500 font-bold mt-px shrink-0" aria-hidden="true">
