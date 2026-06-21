@@ -15,7 +15,7 @@ export function Card({ item }: CardProps) {
       href={item.permalink || '#'}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex flex-col bg-white rounded-2xl p-7 border border-zinc-200 shadow-[0_1px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.09)] hover:-translate-y-[3px] focus:outline-none focus-visible:ring-[3px] focus-visible:ring-indigo-500 focus-visible:ring-offset-0 transition-all duration-200 cursor-pointer hover:border-zinc-300"
+      className="group flex flex-col bg-white rounded-2xl p-7 border border-zinc-200 shadow-[0_1px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.16)] hover:-translate-y-1.5 hover:scale-[1.015] hover:border-indigo-400 focus:outline-none focus-visible:ring-[3px] focus-visible:ring-indigo-500 focus-visible:ring-offset-0 transition-all duration-200 cursor-pointer"
       aria-label={`${item.title} – ${item.personName} – ${item.team} – apri su Slack`}
     >
       {/* Titolo argomento */}
@@ -62,6 +62,9 @@ export function Card({ item }: CardProps) {
           <time dateTime={new Date(item.lastThreadUpdateTs * 1000).toISOString()}>
             {item.lastThreadUpdateFormatted}
           </time>
+          {item.authorInitials && (
+            <span className="text-zinc-400">· by {item.authorInitials}</span>
+          )}
         </div>
         {item.replyCount > 0 ? (
           <span className="text-xs font-medium text-blue-500 border border-blue-300 px-2.5 py-1 rounded-full">

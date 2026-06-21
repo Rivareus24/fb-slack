@@ -12,6 +12,7 @@ export interface CardItem {
   lastThreadUpdateTs: number;        // unix timestamp (float) per ordinamento
   lastThreadUpdateFormatted: string; // es. "2h fa", "ieri"
   replyCount: number;
+  authorInitials: string;            // iniziali di chi ha scritto il messaggio, es. "MR"
 }
 
 export interface ParsedChannel {

@@ -14,6 +14,7 @@ interface SlackMessage {
   subtype?: string;
   thread_ts?: string;
   reply_count?: number;
+  user?: string;
 }
 
 // Messages used only to invite the bot (e.g. "@fb") arrive as bare mentions
@@ -95,6 +96,32 @@ async function fetchLatestThreadTs(
   return Math.max(...messages.map(m => parseFloat(m.ts ?? '0')));
 }
 
+// Resolves a Slack user ID to initials (first + last name), cached per request.
+async function fetchAuthorInitials(
+  slack: WebClient,
+  userId: string | undefined,
+  cache: Map<string, string>
+): Promise<string> {
+  if (!userId) return '';
+  const cached = cache.get(userId);
+  if (cached !== undefined) return cached;
+
+  const res = await slack.users.info({ user: userId });
+  const name =
+    res.user?.profile?.real_name || res.user?.real_name || res.user?.name || '';
+  const initials = toInitials(name);
+  cache.set(userId, initials);
+  return initials;
+}
+
+function toInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return '';
+  const first = parts[0][0] ?? '';
+  const last = parts.length > 1 ? parts[parts.length - 1][0] ?? '' : '';
+  return (first + last).toUpperCase();
+}
+
 async function fetchPermalink(
   slack: WebClient,
   channelId: string,
@@ -111,6 +138,7 @@ export async function fetchCards(): Promise<CardItem[]> {
   const slack = getClient();
   const channels = await fetchAllPrivateChannels(slack);
   const items: CardItem[] = [];
+  const userInitialsCache = new Map<string, string>();
 
   for (const channel of channels) {
     const parsedChannel = parseChannelName(channel.name);
@@ -129,6 +157,11 @@ export async function fetchCards(): Promise<CardItem[]> {
           : parseFloat(message.ts);
 
       const permalink = await fetchPermalink(slack, channel.id, message.ts);
+      const authorInitials = await fetchAuthorInitials(
+        slack,
+        message.user,
+        userInitialsCache
+      );
 
       items.push({
         id: `${channel.id}-${message.ts}`,
@@ -144,6 +177,7 @@ export async function fetchCards(): Promise<CardItem[]> {
         lastThreadUpdateTs,
         lastThreadUpdateFormatted: formatRelativeDate(lastThreadUpdateTs),
         replyCount,
+        authorInitials,
       });
     }
   }

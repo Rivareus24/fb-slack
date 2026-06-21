@@ -11,7 +11,10 @@ export function InfoPopover() {
         aria-label="Informazioni su come funziona la lista"
         aria-describedby="info-popover-content"
         aria-expanded={open}
-        onClick={() => setOpen(v => !v)}
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
         className="w-[22px] h-[22px] rounded-full border-[1.5px] border-zinc-400 text-zinc-500 text-[12px] font-semibold flex items-center justify-center transition-colors hover:border-indigo-500 hover:text-indigo-500 hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1"
       >
         i
