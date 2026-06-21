@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import type { CardItem } from '@/lib/types';
 import { Card } from './Card';
 import { InfoPopover } from './InfoPopover';
@@ -17,14 +17,10 @@ export function PageClient({ items }: PageClientProps) {
     [items]
   );
 
-  // Default: all teams active
-  const [activeTeams, setActiveTeams] = useState<Set<string>>(() => new Set(teams));
+  // Default: no team selected → all messages shown (faster to pick a single team)
+  const [activeTeams, setActiveTeams] = useState<Set<string>>(() => new Set());
   const [search, setSearch] = useState('');
   const [sortOrder, setSortOrder] = useState<'date' | 'team'>('date');
-
-  useEffect(() => {
-    setActiveTeams(new Set(teams));
-  }, [teams]);
 
   const filtered = useMemo(() => {
     const noFilter = activeTeams.size === 0;
@@ -106,7 +102,7 @@ export function PageClient({ items }: PageClientProps) {
             className={`text-[13px] font-medium px-[15px] py-[6px] rounded-full border-[1.5px] transition-all whitespace-nowrap cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
               activeTeams.has(team)
                 ? `${teamColor(team).bg} ${teamColor(team).text} ${teamColor(team).border}`
-                : 'bg-white text-zinc-400 border-zinc-200 hover:border-zinc-300 hover:text-zinc-600'
+                : `bg-white ${teamColor(team).text} ${teamColor(team).border} opacity-70 hover:opacity-100`
             }`}
           >
             {team}
