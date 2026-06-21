@@ -38,8 +38,8 @@ export function Card({ item }: CardProps) {
           className="flex items-center gap-1.5 text-[12px] font-semibold text-[#4A154B] bg-[#4A154B]/8 rounded-full px-2.5 py-1 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0 transition-all duration-200 ease-out shrink-0 whitespace-nowrap"
           aria-hidden="true"
         >
-          <SlackIcon />
           ↗ Slack
+          <SlackIcon />
         </span>
       </div>
 
