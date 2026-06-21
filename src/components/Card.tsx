@@ -39,7 +39,7 @@ export function Card({ item }: CardProps) {
           aria-hidden="true"
         >
           <SlackIcon />
-          Apri in Slack
+          ↗ Slack
         </span>
       </div>
 
