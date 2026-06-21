@@ -156,7 +156,7 @@ export function PageClient({ items }: PageClientProps) {
         ) : (
           <div
             className="grid gap-5"
-            style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))' }}
+            style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(370px, 1fr))' }}
           >
             {filtered.map(item => (
               <Card key={item.id} item={item} />
