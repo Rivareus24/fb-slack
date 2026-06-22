@@ -81,19 +81,27 @@ async function fetchChannelMessages(
   return result;
 }
 
-async function fetchLatestThreadTs(
+async function fetchThreadDetails(
   slack: WebClient,
   channelId: string,
   threadTs: string
-): Promise<number> {
+): Promise<{ lastUpdateTs: number; firstReplyText: string }> {
   const res = await slack.conversations.replies({
     channel: channelId,
     ts: threadTs,
     limit: 200,
   });
   const messages = res.messages ?? [];
-  if (messages.length === 0) return parseFloat(threadTs);
-  return Math.max(...messages.map(m => parseFloat(m.ts ?? '0')));
+  if (messages.length === 0) {
+    return { lastUpdateTs: parseFloat(threadTs), firstReplyText: '' };
+  }
+  const lastUpdateTs = Math.max(...messages.map(m => parseFloat(m.ts ?? '0')));
+  // messages[0] is the thread parent; the description fallback is the first
+  // actual reply that carries real text (skip bare bot-invite mentions).
+  const firstReply = messages.find(
+    m => m.ts !== threadTs && m.text && !isOnlyMentions(m.text)
+  );
+  return { lastUpdateTs, firstReplyText: firstReply?.text ?? '' };
 }
 
 // Resolves a Slack user ID to initials (first + last name), cached per request.
@@ -151,10 +159,17 @@ export async function fetchCards(): Promise<CardItem[]> {
       if (!parsedMsg) continue;
 
       const replyCount = message.reply_count ?? 0;
-      const lastThreadUpdateTs =
-        replyCount > 0
-          ? await fetchLatestThreadTs(slack, channel.id, message.ts)
-          : parseFloat(message.ts);
+      let lastThreadUpdateTs = parseFloat(message.ts);
+      let description = parsedMsg.description;
+
+      if (replyCount > 0) {
+        const thread = await fetchThreadDetails(slack, channel.id, message.ts);
+        lastThreadUpdateTs = thread.lastUpdateTs;
+        // Title-only message: fall back to the first thread reply as description.
+        if (!description && thread.firstReplyText) {
+          description = emojify(thread.firstReplyText).trim();
+        }
+      }
 
       const permalink = await fetchPermalink(slack, channel.id, message.ts);
       const authorInitials = await fetchAuthorInitials(
@@ -172,7 +187,7 @@ export async function fetchCards(): Promise<CardItem[]> {
         messageTs: message.ts,
         threadTs: message.thread_ts ?? message.ts,
         title: parsedMsg.title,
-        description: parsedMsg.description,
+        description,
         permalink,
         lastThreadUpdateTs,
         lastThreadUpdateFormatted: formatRelativeDate(lastThreadUpdateTs),
