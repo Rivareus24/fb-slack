@@ -78,9 +78,9 @@ describe('parseMessage', () => {
     expect(parseMessage('Titolo Normale\ndescrizione')).toBeNull();
   });
 
-  it('salta shortcode emoji non convertiti e estrae il titolo caps', () => {
+  it('salta shortcode emoji non convertiti e tiene tutta la prima riga', () => {
     expect(parseMessage(':bust_in_silhouette: GIANMARCO SANTI ft Mario e Camilla')).toEqual({
-      title: 'GIANMARCO SANTI',
+      title: 'GIANMARCO SANTI ft Mario e Camilla',
       description: '',
     });
     expect(parseMessage(':fire: PROGETTO ALPHA\nDescrizione')).toEqual({
@@ -89,14 +89,25 @@ describe('parseMessage', () => {
     });
   });
 
-  it('estrae solo la parte in maiuscolo se la prima riga ha un suffisso minuscolo', () => {
+  it('tiene tutta la prima riga quando inizia in maiuscolo', () => {
     expect(parseMessage('TL WANNABE    (non solo Ivan :eyes: )')).toEqual({
-      title: 'TL WANNABE',
+      title: 'TL WANNABE (non solo Ivan )',
       description: '',
     });
     expect(parseMessage('TITOLO parziale\ndescrizione')).toEqual({
-      title: 'TITOLO',
+      title: 'TITOLO parziale',
       description: 'descrizione',
+    });
+  });
+
+  it('tiene la prima riga completa anche con minuscole dopo il primo token caps', () => {
+    expect(
+      parseMessage(
+        'COME si percepisce CAMILLA in Zupit\nSpoiler: Cami si percepisce nella sfera del OK',
+      ),
+    ).toEqual({
+      title: 'COME si percepisce CAMILLA in Zupit',
+      description: 'Spoiler: Cami si percepisce nella sfera del OK',
     });
   });
 });

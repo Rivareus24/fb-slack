@@ -84,20 +84,29 @@ export function PageClient({ items }: PageClientProps) {
         </div>
 
         {/* Search */}
-        <div className="relative ml-auto max-w-xs w-full">
-          <span
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm pointer-events-none"
+        <div className="relative ml-auto max-w-md w-full">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            width="18"
+            height="18"
             aria-hidden="true"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none"
           >
-            ⌕
-          </span>
+            <circle cx="11" cy="11" r="7" />
+            <line x1="16.5" y1="16.5" x2="21" y2="21" />
+          </svg>
           <input
             type="search"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Cerca per titolo, persona o descrizione…"
+            placeholder="Cerca per titolo, team, zuppo o messaggio"
             aria-label="Cerca nella lista"
-            className="w-full h-[38px] border border-zinc-200 rounded-lg pl-8 pr-3 text-sm text-zinc-900 bg-zinc-50 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:bg-white transition-all"
+            className="w-full h-[38px] border border-zinc-200 rounded-lg pl-10 pr-3 text-sm text-zinc-900 bg-zinc-50 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:bg-white transition-all"
           />
         </div>
       </header>
@@ -128,19 +137,33 @@ export function PageClient({ items }: PageClientProps) {
 
         <div className="w-px h-5 bg-zinc-200 mx-1.5" aria-hidden="true" />
 
-        <select
-          value={sortOrder}
-          onChange={e => setSortOrder(e.target.value as 'date' | 'team')}
-          aria-label="Ordina per"
-          className="ml-auto text-[13px] text-zinc-500 border border-zinc-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-indigo-400 cursor-pointer"
-        >
-          <option value="date">↓ Data aggiornamento</option>
-          <option value="team">Team, Persona A-Z</option>
-        </select>
-
-        <span className="text-[13px] text-zinc-400 whitespace-nowrap" aria-live="polite" aria-atomic="true">
-          {filtered.length} messaggi visibili
-        </span>
+        <div className="ml-auto flex items-center gap-2">
+          <span className="text-[13px] text-zinc-400 font-medium whitespace-nowrap">Ordina per:</span>
+          <div
+            className="inline-flex rounded-lg border border-zinc-200 bg-zinc-50 p-0.5"
+            role="group"
+            aria-label="Ordina per"
+          >
+            {([
+              { value: 'date', label: 'Data aggiornamento' },
+              { value: 'team', label: 'Team, Zuppo' },
+            ] as const).map(opt => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => setSortOrder(opt.value)}
+                aria-pressed={sortOrder === opt.value}
+                className={`text-[13px] font-medium px-3 py-1.5 rounded-md transition-all whitespace-nowrap cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
+                  sortOrder === opt.value
+                    ? 'bg-white text-zinc-900 shadow-sm'
+                    : 'text-zinc-500 hover:text-zinc-700'
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* ── Grid ── */}

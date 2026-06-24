@@ -30,7 +30,7 @@ export function parseMessage(text: string): ParsedMessage | null {
 
   if (lines.length === 0) return null;
 
-  const rawTitle = extractCapsTitle(lines[0]);
+  const rawTitle = extractTitle(lines[0]);
   if (!rawTitle) return null;
 
   return {
@@ -39,21 +39,20 @@ export function parseMessage(text: string): ParsedMessage | null {
   };
 }
 
-// Extracts the leading ALL CAPS tokens from a line, stopping at the first token
-// that contains a lowercase letter. Strips trailing non-alphanumeric characters.
-// Emoji shortcodes like :bust_in_silhouette: are skipped transparently.
-// e.g. ":bust_in_silhouette: GIANMARCO SANTI ft Mario" → "GIANMARCO SANTI"
-// e.g. "TL WANNABE (non solo Ivan)" → "TL WANNABE"
-function extractCapsTitle(line: string): string | null {
-  const tokens = line.replace(/[*_]/g, '').split(/\s+/).filter(t => t.length > 0);
-  const capsTokens: string[] = [];
-  for (const token of tokens) {
-    if (/^:[a-z0-9_+-]+:$/.test(token)) continue; // unconverted emoji shortcode — skip
-    if (/[a-z]/.test(token)) break;
-    capsTokens.push(token);
-  }
-  if (capsTokens.length === 0) return null;
-  const title = capsTokens.join(' ').replace(/[^A-Z0-9]+$/, '').trim();
+// Returns the whole line as the title, but only when it starts with an ALL CAPS
+// token — this keeps the message a valid "card" (lowercase-led lines are rejected).
+// Emoji shortcodes like :bust_in_silhouette: are dropped transparently.
+// e.g. ":bust_in_silhouette: GIANMARCO SANTI ft Mario" → "GIANMARCO SANTI ft Mario"
+// e.g. "COME si percepisce CAMILLA in Zupit" → "COME si percepisce CAMILLA in Zupit"
+// e.g. "Titolo Normale" → null (first token has a lowercase letter)
+function extractTitle(line: string): string | null {
+  const tokens = line
+    .replace(/[*_~`]/g, '') // strip Slack inline formatting markers
+    .split(/\s+/)
+    .filter(t => t.length > 0 && !/^:[a-z0-9_+-]+:$/.test(t)); // drop emoji shortcodes
+  if (tokens.length === 0) return null;
+  if (/[a-z]/.test(tokens[0])) return null; // first token must be ALL CAPS
+  const title = tokens.join(' ').trim();
   return title || null;
 }
 

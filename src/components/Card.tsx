@@ -1,9 +1,32 @@
+import { Fragment } from 'react';
 import type { CardItem } from '@/lib/types';
 import { isFreshThread } from '@/lib/date';
 import { teamColor } from '@/lib/teamColor';
+import { tokenizeMrkdwn } from '@/lib/mrkdwn';
 
 interface CardProps {
   item: CardItem;
+}
+
+function renderDescription(text: string) {
+  return tokenizeMrkdwn(text).map((token, i) => {
+    switch (token.type) {
+      case 'bold':
+        return <strong key={i} className="font-semibold text-zinc-700">{token.text}</strong>;
+      case 'italic':
+        return <em key={i}>{token.text}</em>;
+      case 'code':
+        return (
+          <code key={i} className="font-mono text-[12px] bg-zinc-100 text-zinc-700 rounded px-1 py-0.5">
+            {token.text}
+          </code>
+        );
+      case 'strike':
+        return <s key={i}>{token.text}</s>;
+      default:
+        return <Fragment key={i}>{token.text}</Fragment>;
+    }
+  });
 }
 
 function SlackIcon() {
@@ -57,7 +80,9 @@ export function Card({ item }: CardProps) {
 
       {/* Descrizione */}
       <p className="text-sm text-zinc-500 leading-relaxed line-clamp-3 flex-1 mb-5">
-        {item.description || (
+        {item.description ? (
+          renderDescription(item.description)
+        ) : (
           <span className="italic text-zinc-400">Nessuna descrizione</span>
         )}
       </p>
