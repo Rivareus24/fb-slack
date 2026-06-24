@@ -61,9 +61,7 @@ export function Card({ item }: CardProps) {
           <span className={`text-[11px] font-bold uppercase tracking-wider ${color.text}`}>
             {item.team}
           </span>
-          {item.personName && (
-            <span className="text-[12.5px] font-medium text-zinc-400">· {item.personName}</span>
-          )}
+          <span className="text-[12.5px] font-medium text-zinc-400">· {item.personName || 'Team'}</span>
         </div>
 
         {/* Titolo argomento */}
