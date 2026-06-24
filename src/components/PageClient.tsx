@@ -10,6 +10,30 @@ interface PageClientProps {
   items: CardItem[];
 }
 
+function SearchIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" className={className}>
+      <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clipRule="evenodd" />
+    </svg>
+  );
+}
+
+function FilterIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" className={className}>
+      <path fillRule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z" clipRule="evenodd" />
+    </svg>
+  );
+}
+
+function SortIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" className={className}>
+      <path fillRule="evenodd" d="M2 3.75A.75.75 0 012.75 3h11.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zM2 7.5a.75.75 0 01.75-.75h7.508a.75.75 0 010 1.5H2.75A.75.75 0 012 7.5zM14 7a.75.75 0 01.75.75v6.59l1.95-2.1a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 111.1-1.02l1.95 2.1V7.75A.75.75 0 0114 7zM2 11.25a.75.75 0 01.75-.75h4.562a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z" clipRule="evenodd" />
+    </svg>
+  );
+}
+
 export function PageClient({ items }: PageClientProps) {
   // Derive teams from real data, alphabetically sorted
   const teams = useMemo(
@@ -85,29 +109,17 @@ export function PageClient({ items }: PageClientProps) {
 
         {/* Search — horizontally centered in the top bar */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md px-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            strokeLinecap="round"
-            width="18"
-            height="18"
-            aria-hidden="true"
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none"
-          >
-            <circle cx="11" cy="11" r="7" />
-            <line x1="16.5" y1="16.5" x2="21" y2="21" />
-          </svg>
-          <input
-            type="search"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="Cerca per titolo, team, zuppo o messaggio"
-            aria-label="Cerca nella lista"
-            className="w-full h-[38px] border border-zinc-200 rounded-lg pl-10 pr-3 text-sm text-zinc-900 bg-zinc-50 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:bg-white transition-all"
-          />
+          <div className="relative">
+            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-zinc-400 pointer-events-none" />
+            <input
+              type="search"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Cerca per titolo, team, zuppo o messaggio"
+              aria-label="Cerca nella lista"
+              className="w-full h-[38px] border border-zinc-200 rounded-lg pl-10 pr-3 text-sm text-left text-zinc-900 bg-zinc-50 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:bg-white transition-all"
+            />
+          </div>
         </div>
       </header>
 
@@ -117,7 +129,10 @@ export function PageClient({ items }: PageClientProps) {
         role="group"
         aria-label="Filtra per team"
       >
-        <span className="text-[13px] text-zinc-400 font-medium mr-1">Team:</span>
+        <span className="flex items-center gap-1.5 text-[13px] text-zinc-400 font-medium mr-1">
+          <FilterIcon className="w-4 h-4" />
+          Team:
+        </span>
 
         {teams.map(team => (
           <button
@@ -138,7 +153,10 @@ export function PageClient({ items }: PageClientProps) {
         <div className="w-px h-5 bg-zinc-200 mx-1.5" aria-hidden="true" />
 
         <div className="ml-auto flex items-center gap-2">
-          <span className="text-[13px] text-zinc-400 font-medium whitespace-nowrap">Ordina per:</span>
+          <span className="flex items-center gap-1.5 text-[13px] text-zinc-400 font-medium whitespace-nowrap">
+            <SortIcon className="w-4 h-4" />
+            Ordina per:
+          </span>
           <div
             className="inline-flex rounded-lg border border-zinc-200 bg-zinc-50 p-0.5"
             role="group"
