@@ -49,7 +49,7 @@ export function Card({ item }: CardProps) {
       href={item.permalink || '#'}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex flex-col bg-white rounded-2xl p-7 border border-zinc-200 shadow-[0_1px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.16)] hover:-translate-y-1.5 hover:scale-[1.015] hover:border-indigo-400 focus:outline-none focus-visible:ring-[3px] focus-visible:ring-indigo-500 focus-visible:ring-offset-0 transition-all duration-200 cursor-pointer"
+      className="group flex flex-col bg-white rounded-2xl p-7 border border-zinc-200 shadow-[0_1px_3px_rgba(0,0,0,0.08),0_6px_16px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.16)] hover:-translate-y-1.5 hover:scale-[1.015] hover:border-indigo-400 focus:outline-none focus-visible:ring-[3px] focus-visible:ring-indigo-500 focus-visible:ring-offset-0 transition-all duration-200 cursor-pointer"
       aria-label={`${item.title} – ${item.personName} – ${item.team} – apri su Slack`}
     >
       {/* Titolo argomento */}

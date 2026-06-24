@@ -82,7 +82,7 @@ export function PageClient({ items }: PageClientProps) {
   return (
     <div>
       {/* ── Top bar ── */}
-      <header className="bg-white border-b border-zinc-200 px-9 h-[66px] flex items-center gap-5 sticky top-0 z-20">
+      <header className="bg-white border-b border-zinc-200 px-9 h-[66px] flex items-center gap-5 sticky top-0 z-20 shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
         <div className="flex items-center gap-3">
           <svg
             width="26"
@@ -125,7 +125,7 @@ export function PageClient({ items }: PageClientProps) {
 
       {/* ── Filter bar ── */}
       <div
-        className="bg-white border-b border-zinc-200 px-9 py-3.5 flex items-center gap-2 flex-wrap sticky top-[66px] z-10"
+        className="bg-white border-b border-zinc-200 px-9 py-3.5 flex items-center gap-2 flex-wrap sticky top-[66px] z-10 shadow-[0_3px_8px_rgba(0,0,0,0.05)]"
         role="group"
         aria-label="Filtra per team"
       >
