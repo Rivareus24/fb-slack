@@ -165,9 +165,12 @@ export async function fetchCards(): Promise<CardItem[]> {
       if (replyCount > 0) {
         const thread = await fetchThreadDetails(slack, channel.id, message.ts);
         lastThreadUpdateTs = thread.lastUpdateTs;
-        // Title-only message: fall back to the first thread reply as description.
-        if (!description && thread.firstReplyText) {
-          description = emojify(thread.firstReplyText).trim();
+        // Description is the body below the title concatenated with the first
+        // thread reply (skipping bare bot-invite mentions); either part may be
+        // empty.
+        if (thread.firstReplyText) {
+          const firstReply = `{t} ${emojify(thread.firstReplyText).trim()}`;
+          description = [description, firstReply].filter(Boolean).join('\n');
         }
       }
 
