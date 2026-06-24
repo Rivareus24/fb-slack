@@ -5,6 +5,7 @@ import type { CardItem } from '@/lib/types';
 import { Card } from './Card';
 import { InfoPopover } from './InfoPopover';
 import { teamColor } from '@/lib/teamColor';
+import { teamRank } from '@/lib/teams';
 
 interface PageClientProps {
   items: CardItem[];
@@ -37,7 +38,7 @@ function SortIcon({ className }: { className?: string }) {
 export function PageClient({ items }: PageClientProps) {
   // Derive teams from real data, alphabetically sorted
   const teams = useMemo(
-    () => Array.from(new Set(items.map(i => i.team))).sort(),
+    () => Array.from(new Set(items.map(i => i.team))).sort((a, b) => teamRank(a) - teamRank(b)),
     [items]
   );
 
@@ -62,7 +63,7 @@ export function PageClient({ items }: PageClientProps) {
 
     if (sortOrder === 'team') {
       result.sort((a, b) =>
-        a.team.localeCompare(b.team, 'it') || a.personName.localeCompare(b.personName, 'it')
+        teamRank(a.team) - teamRank(b.team) || a.personName.localeCompare(b.personName, 'it')
       );
     }
     // 'date': items from server are already sorted newest-first

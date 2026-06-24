@@ -49,59 +49,51 @@ export function Card({ item }: CardProps) {
       href={item.permalink || '#'}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex flex-col bg-white rounded-2xl p-7 border border-zinc-200 shadow-[0_1px_3px_rgba(0,0,0,0.08),0_6px_16px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.16)] hover:-translate-y-1.5 hover:scale-[1.015] hover:border-indigo-400 focus:outline-none focus-visible:ring-[3px] focus-visible:ring-indigo-500 focus-visible:ring-offset-0 transition-all duration-200 cursor-pointer"
+      className="group flex bg-white rounded-2xl overflow-hidden border border-zinc-200 shadow-[0_1px_3px_rgba(0,0,0,0.08),0_6px_16px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.16)] hover:-translate-y-1.5 hover:scale-[1.015] focus:outline-none focus-visible:ring-[3px] focus-visible:ring-indigo-500 focus-visible:ring-offset-0 transition-all duration-200 cursor-pointer"
       aria-label={`${item.title} – ${item.personName} – ${item.team} – apri su Slack`}
     >
-      {/* Titolo argomento */}
-      <div className="flex items-start justify-between gap-3 mb-5">
-        <h2 className="text-[17px] font-bold text-zinc-900 leading-snug tracking-tight">
+      {/* Banda colore team — sinistra */}
+      <div className={`w-1.5 shrink-0 ${color.bar}`} aria-hidden="true" />
+
+      <div className="flex flex-col flex-1 min-w-0 p-7">
+        {/* Eyebrow: TEAM · Zuppo */}
+        <div className="flex items-baseline gap-2 flex-wrap mb-3.5">
+          <span className={`text-[11px] font-bold uppercase tracking-wider ${color.text}`}>
+            {item.team}
+          </span>
+          {item.personName && (
+            <span className="text-[12.5px] font-medium text-zinc-400">· {item.personName}</span>
+          )}
+        </div>
+
+        {/* Titolo argomento */}
+        <h2 className="text-[20px] font-extrabold text-zinc-900 leading-tight tracking-tight mb-3.5">
           {item.title}
         </h2>
-        <span
-          className="flex items-center gap-1.5 text-[12px] font-semibold text-[#4A154B] bg-[#4A154B]/8 rounded-full px-2.5 py-1 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0 transition-all duration-200 ease-out shrink-0 whitespace-nowrap"
-          aria-hidden="true"
-        >
-          ↗ Slack
-          <SlackIcon />
-        </span>
-      </div>
 
-      {/* Riga persona */}
-      <div className="flex items-center gap-2.5 py-3.5 border-y border-zinc-100 mb-5">
-        <span className={`text-[12px] font-semibold px-2.5 py-1 rounded-full shrink-0 ${color.bg} ${color.text}`}>
-          {item.team}
-        </span>
-        {item.personName && (
-          <span className="text-[13.5px] font-semibold text-zinc-600">
-            {item.personName}
-          </span>
-        )}
-      </div>
+        {/* Descrizione */}
+        <p className="text-sm text-zinc-600 leading-relaxed line-clamp-3 flex-1 mb-5 whitespace-pre-line">
+          {item.description ? (
+            renderDescription(item.description)
+          ) : (
+            <span className="italic text-zinc-400">Nessuna descrizione</span>
+          )}
+        </p>
 
-      {/* Descrizione */}
-      <p className="text-sm text-zinc-500 leading-relaxed line-clamp-3 flex-1 mb-5 whitespace-pre-line">
-        {item.description ? (
-          renderDescription(item.description)
-        ) : (
-          <span className="italic text-zinc-400">Nessuna descrizione</span>
-        )}
-      </p>
-
-      {/* Footer */}
-      <div className="flex items-center justify-between pt-4 border-t border-zinc-100 mt-auto">
-        <div className="flex items-center gap-1.5 text-[12.5px] text-zinc-400">
+        {/* Footer */}
+        <div className="flex items-center gap-1.5 text-[12px] text-zinc-400 pt-3.5 border-t border-zinc-100 mt-auto">
           <span
-            className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-              fresh ? 'bg-green-400' : 'bg-zinc-300'
-            }`}
+            className={`w-1.5 h-1.5 rounded-full shrink-0 ${fresh ? 'bg-green-400' : 'bg-zinc-300'}`}
             aria-hidden="true"
           />
           <time dateTime={new Date(item.lastThreadUpdateTs * 1000).toISOString()}>
             {item.lastThreadUpdateFormatted}
           </time>
-          {item.authorInitials && (
-            <span className="text-zinc-400">· by {item.authorInitials}</span>
-          )}
+          {item.authorInitials && <span>· by {item.authorInitials}</span>}
+          <span className="ml-auto flex items-center gap-1 font-semibold text-[#4A154B] opacity-60 rounded-full px-2 py-0.5 group-hover:opacity-100 group-hover:bg-[#4A154B]/10 group-hover:scale-105 group-focus-visible:opacity-100 group-focus-visible:bg-[#4A154B]/10 transition-all duration-200">
+            ↗ Slack
+            <SlackIcon />
+          </span>
         </div>
       </div>
     </a>
