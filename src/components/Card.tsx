@@ -65,12 +65,12 @@ export function Card({ item }: CardProps) {
         </div>
 
         {/* Titolo argomento */}
-        <h2 className="text-[20px] font-extrabold text-zinc-900 leading-tight tracking-tight mb-3.5">
+        <h2 className="text-[18px] font-extrabold text-zinc-900 leading-tight tracking-tight mb-3.5">
           {item.title}
         </h2>
 
         {/* Descrizione */}
-        <p className="text-sm text-zinc-600 leading-relaxed line-clamp-3 flex-1 mb-5 whitespace-pre-line">
+        <p className="text-[13px] text-zinc-600 leading-relaxed line-clamp-3 flex-1 mb-5 whitespace-pre-line">
           {item.description ? (
             renderDescription(item.description)
           ) : (
