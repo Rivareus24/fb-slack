@@ -103,15 +103,6 @@ export function Card({ item }: CardProps) {
             <span className="text-zinc-400">· by {item.authorInitials}</span>
           )}
         </div>
-        {item.replyCount > 0 ? (
-          <span className="text-xs font-medium text-blue-500 border border-blue-300 px-2.5 py-1 rounded-full">
-            <span aria-hidden="true">🧵</span> {item.replyCount} {item.replyCount === 1 ? 'risposta' : 'risposte'}
-          </span>
-        ) : (
-          <span className="text-xs font-medium text-zinc-400 border border-zinc-200 px-2.5 py-1 rounded-full">
-            nessuna risposta
-          </span>
-        )}
       </div>
     </a>
   );
