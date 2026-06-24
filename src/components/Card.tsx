@@ -88,7 +88,7 @@ export function Card({ item }: CardProps) {
             {item.lastThreadUpdateFormatted}
           </time>
           {item.authorInitials && <span>· by {item.authorInitials}</span>}
-          <span className="ml-auto flex items-center gap-1 font-semibold text-[#4A154B] opacity-60 rounded-full px-2 py-0.5 group-hover:opacity-100 group-hover:bg-[#4A154B]/10 group-hover:scale-105 group-focus-visible:opacity-100 group-focus-visible:bg-[#4A154B]/10 transition-all duration-200">
+          <span className="ml-auto flex items-center gap-1 font-semibold text-[#4A154B] opacity-0 rounded-full px-2 py-0.5 group-hover:opacity-100 group-hover:bg-[#4A154B]/10 group-hover:scale-105 group-focus-visible:opacity-100 group-focus-visible:bg-[#4A154B]/10 transition-all duration-200">
             ↗ Slack
             <SlackIcon />
           </span>
