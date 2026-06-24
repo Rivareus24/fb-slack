@@ -79,7 +79,7 @@ export function Card({ item }: CardProps) {
       </div>
 
       {/* Descrizione */}
-      <p className="text-sm text-zinc-500 leading-relaxed line-clamp-3 flex-1 mb-5">
+      <p className="text-sm text-zinc-500 leading-relaxed line-clamp-3 flex-1 mb-5 whitespace-pre-line">
         {item.description ? (
           renderDescription(item.description)
         ) : (

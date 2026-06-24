@@ -83,8 +83,8 @@ export function PageClient({ items }: PageClientProps) {
           <InfoPopover />
         </div>
 
-        {/* Search */}
-        <div className="relative ml-auto max-w-md w-full">
+        {/* Search — horizontally centered in the top bar */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md px-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
