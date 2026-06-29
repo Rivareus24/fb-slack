@@ -42,6 +42,13 @@ export function PageClient({ items }: PageClientProps) {
     [items]
   );
 
+  // Count of items per team, for the filter badges
+  const teamCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const item of items) counts[item.team] = (counts[item.team] ?? 0) + 1;
+    return counts;
+  }, [items]);
+
   // Default: no team selected → all messages shown (faster to pick a single team)
   const [activeTeams, setActiveTeams] = useState<Set<string>>(() => new Set());
   const [search, setSearch] = useState('');
@@ -148,6 +155,7 @@ export function PageClient({ items }: PageClientProps) {
             }`}
           >
             {team}
+            <span className="ml-1.5 opacity-60 tabular-nums">{teamCounts[team]}</span>
           </button>
         ))}
 
