@@ -5,7 +5,7 @@ import type { CardItem } from '@/lib/types';
 import { Card } from './Card';
 import { InfoPopover } from './InfoPopover';
 import { teamColor } from '@/lib/teamColor';
-import { teamRank } from '@/lib/teams';
+import { teamRank, TEAM_ORDER } from '@/lib/teams';
 
 interface PageClientProps {
   items: CardItem[];
@@ -37,8 +37,10 @@ function SortIcon({ className }: { className?: string }) {
 
 export function PageClient({ items }: PageClientProps) {
   // Derive teams from real data, alphabetically sorted
+  // All canonical teams plus any unexpected ones in the data, even with no messages
   const teams = useMemo(
-    () => Array.from(new Set(items.map(i => i.team))).sort((a, b) => teamRank(a) - teamRank(b)),
+    () => Array.from(new Set([...TEAM_ORDER, ...items.map(i => i.team)]))
+      .sort((a, b) => teamRank(a) - teamRank(b)),
     [items]
   );
 
@@ -155,7 +157,7 @@ export function PageClient({ items }: PageClientProps) {
             }`}
           >
             {team}
-            <span className="ml-1.5 opacity-60 tabular-nums">{teamCounts[team]}</span>
+            <span className="ml-1.5 opacity-60 tabular-nums">{teamCounts[team] ?? 0}</span>
           </button>
         ))}
 
