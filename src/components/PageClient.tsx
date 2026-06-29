@@ -144,7 +144,7 @@ export function PageClient({ items }: PageClientProps) {
             className={`text-[13px] font-medium px-[15px] py-[6px] rounded-full border-[1.5px] transition-all whitespace-nowrap cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
               activeTeams.has(team)
                 ? `${teamColor(team).bg} ${teamColor(team).text} ${teamColor(team).border}`
-                : `bg-white ${teamColor(team).text} ${teamColor(team).border} opacity-70 hover:opacity-100`
+                : `bg-white ${teamColor(team).text} ${teamColor(team).solidBorder} ${teamColor(team).hoverBg}`
             }`}
           >
             {team}
